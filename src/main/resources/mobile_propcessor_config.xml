@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+  http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+   	
+   	<!--  autowire-candidate attribute of bean  -->
+   	<!-- if we configure bean for more than one time with different ids then IOC will throw an Exception. 
+   	To overcome this duplicate beans problem, we can use autowire-candidate=”false” or primanry="true"  -->
+   	<!-- As per above configuration, process1 bean will be ignored and process2 bean will be injected. -->
+   	<!-- As per above configuration, process2 bean will be ignored and process1 bean will be injected.  -->
+	<bean id="mobile" class="com.nineleaps.model.Mobile" autowire="byType">
+	    <property name="mobileName" value="Redmi"></property>
+	    <property name="mobileModel" value="Note 5"></property>
+	</bean> 
+	
+	
+	<bean id="process1" class="com.nineleaps.model.Processor" primary="true">
+	    <property name="process" value="2GHz"></property>
+	    <property name="ram" value="4GB"></property>
+	</bean>
+	
+	<!--<bean id="process1" class="com.nineleaps.model.Processor" autowire-candidate="false">
+	    <property name="process" value="2GHz"></property>
+	    <property name="ram" value="4GB"></property>
+	</bean> -->
+	
+	<bean id="process2" class="com.nineleaps.model.Processor">
+	
+	    <property name="process" value="1GHz"></property>
+	    <property name="ram" value="3GB"></property>
+	</bean>
+  
+</beans>

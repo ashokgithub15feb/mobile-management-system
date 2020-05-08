@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+  http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- configuring multiple resource file in single applicationcontext  -->
+	<import resource="mobile_propcessor_config.xml"/>
+
+   <bean id="airtel" class="com.nineleaps.model.Airtel"/> 
+  	
+  	<bean id="mcsFactoryBean" class="com.nineleaps.service.MobileClientService" /> 
+  
+   <bean id="mobileClientService" class = "com.nineleaps.service.MobileClientService" factory-method="createInstance" />	
+  
+   <bean id="mobileClientService1" class = "com.nineleaps.service.MobileClientService" factory-bean="mcsFactoryBean" factory-method="getMsg" />	
+  
+   <bean id="customer" class="com.nineleaps.model.CustomerNumbers">
+   		<property name="lists">
+			<list>
+				<ref bean = "personBean" />
+			</list>
+		</property>
+		
+		<property name="sets">
+			<set>
+				<ref bean = "personBean" />
+			</set>
+		</property>
+		
+		<property name="maps">
+			<map>
+				<entry key = "Key1" value-ref="personBean" />
+			</map>
+		</property>
+		
+		<property name="properties">
+			<props>
+				<prop key = "Key1">ritvik@gamil.com</prop>
+			</props>
+		</property>
+		
+		
+   </bean>
+   
+    <bean id="personBean" class="com.nineleaps.model.Person">
+		<property name="id" value="101" />
+		<property name="name" value="Ritvik" />
+		<property name="age" value="26" />
+		<property name="address" value="Mimbai" />
+		<property name="phoneNumber" ref="cellNumber" />
+	</bean>
+	
+	<!-- constructor argument resolution - name based --> 
+	<bean id="cellNumber" class="com.nineleaps.model.PhoneNumber" scope="prototype" lazy-init="true">
+	  	<constructor-arg name = "number" value = "9090909090" />
+	  	<constructor-arg name = "name" value = "Airtel" />
+	</bean>
+	
+	<!-- constructor argument resolution - index based -->
+	<!-- <bean id="cellNumber" class="com.nineleaps.model.PhoneNumber" scope="prototype">
+	  	<constructor-arg index = "0" value = "9090909090" />
+	  	<constructor-arg index = "1" value = "Airtel" />
+	</bean> -->
+	
+	<!-- constructor argument resolution - type based -->
+	<!-- <bean id="cellNumber" class="com.nineleaps.model.PhoneNumber" scope="prototype">
+	  	<constructor-arg type = "java.lang.String" value = "9090909090" />
+	  	<constructor-arg type = "java.lang.String" value = "Airtel" />
+	</bean> -->
+	
+	<!-- <bean id="cellNumber" class="com.nineleaps.model.PhoneNumber" scope="prototype">
+	  	<property name = "number" value = "9090909090" />
+	  	<property name = "name" value = "Airtel" />
+	</bean> -->
+	
+	<!-- <bean id="cellNumber" class="com.nineleaps.model.PhoneNumber" scope="prototype">
+	  	<property name = "number" value = "9090909090" />
+	  	<property name = "name" value = "Airtel" />
+	</bean> -->
+	
+	<!-- <bean id="personBean2" class="com.nineleaps.model.Person">
+		<property name="id" value="102" />
+		<property name="name" value="Sonu" />
+		<property name="age" value="25" />
+		<property name="address" value="Bangalore" />
+		<property name="phoneNumber" ref="cellNumber1" />
+	</bean>
+	
+  
+  <bean id="cellNumber1" class="com.nineleaps.model.PhoneNumber">
+  	<property name = "number" value = "7878787878" />
+  	<property name = "name" value = "Vodaphone" />
+  </bean> -->
+	
+  <!-- <bean id="retailerFeedback" class="com.nineleaps.feedback.bean.AirtelRetailerFeedback">
+  	<property name = "rating" value = "5" />
+  	<property name = "feedback" value = "Very Good Service Provider" />
+  </bean>
+  
+  <bean id="publicFeedback" class="com.nineleaps.feedback.bean.AirtelPublicFeedback">
+  
+  	<constructor-arg name = "rating" value = "4" />
+  	<constructor-arg name = "feedback" value = "Good Service Provider" />
+
+  </bean>
+  
+  <bean id="customerFeedback" class="com.nineleaps.feedback.bean.AirtelCustomerFeedback" depends-on="publicFeedback, retailerFeedback">
+  	<property name = "rating" value = "4" />
+  	<property name = "feedback" value = "Average Service Provider" />
+  	<property name = "airtelPublicFeedback" ref = "publicFeedback" />
+  	<property name = "airtelRetailerFeedback" ref = "retailerFeedback" />
+  </bean> -->
+   
+   <!-- Bean Life Cycle -->
+   
+   <!--    awareinterfaces-->
+    <bean id="awareBean" class="com.nineleaps.domain.AwareBeanImpl">
+    </bean>
+   
+    <bean id = "bookBeanPost" class="com.nineleaps.domain.PhoneBookBean"> 
+   		
+   		<property name = "bookName" value= "Phone Book "></property>
+   	
+   </bean>
+   	
+   	<bean id = "bookBeanPostProcessor" class = "com.nineleaps.domain.PhoneBookBeanPostProcessor">
+   		
+   	</bean> 
+   	
+   	 <bean id = "bookBean" class = "com.nineleaps.domain.PhoneBook">
+   		 <property name = "phoneBookName" value= "Phone Book Name"></property>
+  	 </bean>
+   	
+   		
+    <bean id = "bookCustomBean" class = "com.nineleaps.domain.PhoneBookCustomBean" init-method="customInit" destroy-method="customDestroy">
+   		 <property name = "bookName" value= "Custome phone Book name"></property>
+   	</bean>
+   	
+   	<!--  autowire-candidate attribute of bean  -->
+   	<!-- if we configure bean for more than one time with different ids then IOC will throw an Exception. 
+   	To overcome this duplicate beans problem, we can use autowire-candidate=”false” or primanry="true"  -->
+   	<!-- As per above configuration, process1 bean will be ignored and process2 bean will be injected. -->
+   	<!-- As per above configuration, process2 bean will be ignored and process1 bean will be injected.  -->
+	<!--<bean id="mobile" class="com.nineleaps.model.Mobile" autowire="byType">
+	    <property name="mobileName" value="Redmi"></property>
+	    <property name="mobileModel" value="Note 5"></property>
+	</bean> 
+	
+	
+	<bean id="process1" class="com.nineleaps.model.Processor" primary="true">
+	    <property name="process" value="2GHz"></property>
+	    <property name="ram" value="4GB"></property>
+	</bean> -->
+	
+	<!--<bean id="process1" class="com.nineleaps.model.Processor" autowire-candidate="false">
+	    <property name="process" value="2GHz"></property>
+	    <property name="ram" value="4GB"></property>
+	</bean>-->
+	
+	<!-- <bean id="process2" class="com.nineleaps.model.Processor">
+	
+	    <property name="process" value="1GHz"></property>
+	    <property name="ram" value="3GB"></property>
+	</bean> -->
+  
+  <!-- Spring Boot GenericApplicationContext  -->
+  	<bean id="timeService" class="com.nineleaps.service.TimeService">
+        <property name="getNowTime" value="2020-05-07T11:18:39.670Z" />
+        <property name="getNow" ref = "anInstant" />
+	</bean>
+	
+  	<bean id="anInstant" class="java.time.Instant" factory-method="now"/>
+
+	 <!-- Inner Bean --> 	
+  	<bean id="processorBased" class="com.nineleaps.model.ProcessorBased">
+  		<property name="processorsCompany">
+  			<bean id="processorsCompany" class="com.nineleaps.model.ProcessorsCompany">
+  				<property name="qualcomm" value="Qualcomm the highest performing yet, recently launched Snapdragon 845" />
+  				<property name="mediaTek" value="MediaTek largest model number MT67 is the most powerful" />
+  				<property name="samsung" value="Samsung Good Processor" />
+  				<property name="apple" value="Apple Model Number APL0098 highest performing yet" />
+  			</bean>
+  		</property>
+  	</bean>
+  
+  	<!-- Bean Definition Inheritance  -->
+  	<bean id="mobilePhoneRamMemory" class="com.nineleaps.model.MobilePhoneRamMemory" abstract="true">
+  		<property name="fullName" value="Random Access Memory"/>
+  	</bean>
+  	
+  	<!-- Child Bean Definition Inheritance  -->
+  	<bean id="ramBean" parent="mobilePhoneRamMemory">
+  		<property name="ramFeatures" value="RAM is a very fast responding memory that can be quickly erased and new data written on it."/>
+  		<property name="speed" value="Clock Speed"/>
+  		<property name="rates" value="RAM are kept at moderate rates of 300 to 500 MHz to save on power usage"/>
+  		<property name="memoryType" value="Volatile Memory’ and being dynamic"/>
+  		
+  	</bean>
+  	
+  	<!-- static inner class -->
+  	<bean id="romFeature" class="com.nineleaps.model.MobilePhoneRomMemory$RomFeature">
+  		<property name="fullName" value="Read Only Memory"/>
+  		<property name="romFeatures" value="The memory chip on which the phone's Operating System OS is stored is called a ROM (read only memory)."/>
+  		<property name="speed" value="The external SD card memory operates much Slower"/>
+  		<property name="rates" value="Class 10 micro SD card which is able to write at a speed of 10 MB/second"/>
+  		<property name="memoryType" value="Static Memeory, Only system updates can rewrite into those chips not user"/>
+  	</bean>
+  	
+  	<!-- FactoryBean -->
+  	<bean id="standardSIM" class="com.nineleaps.dto.AirtelSimCardTypeFactoryBean">
+  		<property name="simType" value="Standard SIM" />
+  	</bean>
+  	
+  	<bean id="microSIM" class="com.nineleaps.dto.AirtelSimCardTypeFactoryBean">
+  		<property name="simType" value="Micro SIM" />
+  	</bean>
+  	
+  	<bean id="nanoSIM" class="com.nineleaps.dto.AirtelSimCardTypeFactoryBean">
+  		<property name="simType" value="Nano SIM" />
+  	</bean>
+  	<!-- Alias -->
+  	<alias name="nanoSIM" alias="nano-SIM" />
+  	
+  	<!-- 1. Method Injection --> 
+  	<bean id="simCardState" class="com.nineleaps.model.methodinjection.SimCardStatePrototype" scope="prototype">
+		<property name="simStateName" value="Karnataka" />
+		<property name="simCardType" value="Airtel" />
+  	</bean>
+  	<bean id="simCardCountry" class="com.nineleaps.model.methodinjection.SimCardCountrySingleton">
+		<property name="simCountryName" value="India" />
+		<property name="cardStatePrototype" ref="simCardState" />	  		
+  	</bean>
+  	
+  	<!-- 2. Method Injection Using Lookup tag--> 
+  	<bean id="simCardStateAbs" class="com.nineleaps.model.methodinjection.SimCardStatePrototypeAbstractClassDependent" scope="prototype">
+		<property name="simStateName" value="Mumbai" />
+		<property name="simCardType" value="Vodaphone" />
+			  		
+  	</bean>
+  	<bean id="simCardCountryAbs" class="com.nineleaps.model.methodinjection.SimCardCountrySingletonAbstract">
+		<property name="simCountryName" value="India" />
+		<lookup-method bean="simCardStateAbs" name="getSimCardStatePrototypeAbstractClassDependent" />	  		
+  	</bean>
+  	
+  	<!-- 2. Method Injection Using Application Context Aware approach--> 
+  	<bean id="simCardStateAware" class="com.nineleaps.model.methodinjection.SimCardStatePrototype" scope="prototype">
+		<property name="simStateName" value="Delhi" />
+		<property name="simCardType" value="Airtel" />
+  	</bean>
+  	<bean id="simCardCountryAware" class="com.nineleaps.model.methodinjection.SimCardCountrySingletonAppContextAware">
+		<property name="simCountryName" value="India" />
+  	</bean>
+  	
+  	<!-- Circuler Dependency  -->
+  	<bean id="airtelDataPlane" class="com.nineleaps.model.circuler.AirtelDataPlane">
+  		<property name="dataPlaneName" value="Airtel 4G"/>
+  		<property name="amount" value="500"/>
+  		<property name="vodaphoneDataPlane" ref="vodaphoneDataPlaneBean"/>
+  	</bean>
+  	<bean id="vodaphoneDataPlaneBean" class="com.nineleaps.model.circuler.VodaphoneDataPlane">
+		<property name="dataPlaneName" value="Vodaphone 4G"/>
+		<property name="amount" value="520"/>
+  		<property name="airtelDataPlane" ref="airtelDataPlane"/>
+  	</bean>
+  	
+    
+  	<!-- Property Editor -->
+  	<bean id="cardDetails" class="com.nineleaps.model.BillPaymentByCreditCardDetails">
+  		<property name="rawCardNumber" value="1234-1234-1111-0011" />
+  		<property name="bankIdNo" value="123412" />
+  		<property name="accountNo" value="341111001" />
+  		<property name="checkCode" value="9" />
+  	</bean>
+  	
+  	
+  	<!-- Custom collection injection -->
+  	<bean id="simDevice1" class="com.nineleaps.model.SimDevice">
+  		<constructor-arg name="simSlotNum" value="2" />
+  		<constructor-arg name="deviceName" value="Redmi 7" />
+  		<constructor-arg name="primarySlotName" value="Primary Slot SIM-1" />
+  		<constructor-arg name="ram" value="4GB" />
+  	</bean>
+  	<bean id="simDevice2" class="com.nineleaps.model.SimDevice">
+  		<constructor-arg name="simSlotNum" value="2" />
+  		<constructor-arg name="deviceName" value="Redmi 7" />
+  		<constructor-arg name="primarySlotName" value="Primary Slot SIM-1" />
+  		<constructor-arg name="ram" value="6GB" />
+  	</bean>
+  	<bean id="simDevice3" class="com.nineleaps.model.SimDevice">
+  		<constructor-arg name="simSlotNum" value="2" />
+  		<constructor-arg name="deviceName" value="null" />
+  		<constructor-arg name="primarySlotName" value="Primary Slot SIM-1" />
+  		<constructor-arg name="ram" value="8GB" />
+  	</bean>
+  	<bean id="deviceSlot" class="com.nineleaps.model.DeviceSlot">
+  		<constructor-arg name="slotNum" value="2" />
+  		<constructor-arg name="simSlotName" value="Dual SIM Device" />
+  		<constructor-arg>
+  			<list>
+  				<ref bean="simDevice1" />
+  				<ref bean="simDevice2" />
+  			</list>
+  		</constructor-arg>
+  	</bean>
+  	<!-- Collection Merging merge=true -->
+  	<bean id="chileCollection" parent="deviceSlot">
+  		<property name="devices">
+  			<list merge="true">
+  				<ref bean="simDevice3" />
+  			</list>
+  		</property>
+  	</bean>
+  	
+  	<!-- Compound Property -->
+  	<bean id="compoundPropertyName" class="com.nineleaps.model.compoundproperty.Bar">
+        <property name="foo.fred.bob.jhon" value="Jhon Rambo" />
+    </bean>
+  	
+</beans>
