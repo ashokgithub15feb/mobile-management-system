@@ -316,5 +316,22 @@
   	<bean id="compoundPropertyName" class="com.nineleaps.model.compoundproperty.Bar">
         <property name="foo.fred.bob.jhon" value="Jhon Rambo" />
     </bean>
-  	
+  		
+  	<!-- Replaced Method -->	
+  	<!--<bean id="newCircuit" class="com.nineleaps.model.NewCircuit" />
+
+	<bean id="device" class="com.nineleaps.model.DeviceDesign" />
+		<replaced-method name="getCircuit" replacer="newCircuit" />
+	</bean> -->
+		
+	<bean id="supportService" class="com.nineleaps.model.MobileSupportService">
+		<property name="map">
+			<map>
+				<entry key = "host" value="mail.example.com" />
+				<entry key = "port" value="25" />
+				<entry key = "from" value="example@boraji.com" />
+			</map>
+		</property>
+	</bean>		
+		
 </beans>

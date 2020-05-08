@@ -31,6 +31,7 @@ import com.nineleaps.model.Idea;
 import com.nineleaps.model.Mobile;
 import com.nineleaps.model.MobilePhoneRamMemory;
 import com.nineleaps.model.MobilePhoneRomMemory.RomFeature;
+import com.nineleaps.model.MobileSupportService;
 import com.nineleaps.model.Person;
 import com.nineleaps.model.PhoneNumber;
 import com.nineleaps.model.Processor;
@@ -295,6 +296,19 @@ public class MobileManagementSystemApplication implements CommandLineRunner
 		 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		
+		 //method replacement 
+//		 DeviceDesign deviceDesign = (DeviceDesign) context.getBean("device");
+//		 deviceDesign.getCircuit();
+//		 deviceDesign.getDesign();
+		
+		 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		
+		 MobileSupportService mobileSupportService= (MobileSupportService) context.getBean("supportService");
+
+		 System.out.println("--------------------------------------------------------------------------------");
+		 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		 
 		 ((AbstractApplicationContext) context).registerShutdownHook(); 
 		 ((AbstractApplicationContext) context1).registerShutdownHook(); 
 		 ((AbstractApplicationContext) context11).registerShutdownHook(); 
