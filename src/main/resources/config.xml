@@ -4,6 +4,8 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans 
   http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+   <!-- <context:component-scan base-package="com.nineleaps"/> -->
+
 	<!-- configuring multiple resource file in single applicationcontext  -->
 	<import resource="mobile_propcessor_config.xml"/>
 
@@ -125,8 +127,13 @@
    </bean>
    	
    	<bean id = "bookBeanPostProcessor" class = "com.nineleaps.domain.PhoneBookBeanPostProcessor">
-   		
    	</bean> 
+   	<bean id = "bookBeanPostProcessor2" class = "com.nineleaps.domain.PhoneBookBeanPostProcessor2">
+   	</bean> 
+   	
+   	<bean id = "customBeanFactory" class = "com.nineleaps.domain.CustomBeanFactory">
+   	</bean> 
+   	
    	
    	 <bean id = "bookBean" class = "com.nineleaps.domain.PhoneBook">
    		 <property name = "phoneBookName" value= "Phone Book Name"></property>
@@ -334,4 +341,31 @@
 		</property>
 	</bean>		
 		
+	<!-- PropertyOverrideConfigurer  -->	
+	<!-- <bean class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
+		<property name="location" value="classpath:beanOverride.cfg" />
+	</bean>
+	
+	 <bean id="customerBeanProprty" class="com.nineleaps.model.Customer">
+		<property name="id" value="101" />
+		<property name="name" value="Ritvik" />
+		<property name="age" value="26" />
+		<property name="location" value="Mimbai" />
+	</bean>-->
+	
+	<bean id="messageSource"
+            class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>format</value>
+                <value>exceptions</value>
+                <value>windows</value>
+            </list>
+        </property>
+    </bean>
+	
+	<!-- <bean id="example" class="com.nineleaps.model.Example">
+        <property name="messages" ref="messageSource"/>
+    </bean>-->
+    
 </beans>
